@@ -25,7 +25,18 @@
       "[development]": {
         "auth": {
           "kind": "mocked",
-          "users": {}
+          "users": {
+            "incident.support@tester.sap.com": {
+              "password": "initial",
+              "roles": ["support"]
+            },
+            "alice": {
+              "roles": ["support"]
+            },
+            "bob": {
+              "roles": ["support"]
+            }
+          }
         }
       }
     }
