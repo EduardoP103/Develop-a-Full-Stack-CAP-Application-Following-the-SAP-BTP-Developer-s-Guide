@@ -2,7 +2,7 @@
   "name": "incident-management",
   "version": "1.0.0",
   "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
+  "repository": "<add your repository here>",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
@@ -11,9 +11,15 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
-    "@sap/ux-specification": "^1.120.3"
+    "@sap/ux-specification": "^1.120.3",
+    "axios": "^1.6.7",
+    "chai": "^4.4.1",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "jest": "^29.7.0"
   },
   "scripts": {
+    "test": "jest tests/test.js",
     "start": "cds-serve",
     "watch-incidents": "cds watch --open incidents/webapp/index.html?sap-ui-xx-viewCache=false"
   },
@@ -28,13 +34,19 @@
           "users": {
             "incident.support@tester.sap.com": {
               "password": "initial",
-              "roles": ["support"]
+              "roles": [
+                "support"
+              ]
             },
             "alice": {
-              "roles": ["support"]
+              "roles": [
+                "support"
+              ]
             },
             "bob": {
-              "roles": ["support"]
+              "roles": [
+                "support"
+              ]
             }
           }
         }
