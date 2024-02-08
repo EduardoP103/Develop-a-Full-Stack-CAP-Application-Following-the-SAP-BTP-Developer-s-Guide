@@ -1,0 +1,93 @@
+_schema-version: "3.1"
+ID: incident-management
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: incident-management-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: incident-management-db
+  - name: incident-management-auth
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm
+- name: incident-management-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: incident-management-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: incident-management-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: incident-management-destination-service
+    parameters:
+      content-target: true
+  - name: incident-management_html_repo_host
+    parameters:
+      service-key:
+        name: incident-management_html_repo_host-key
+  - name: incident-management-auth
+    parameters:
+      service-key:
+        name: incident-management-auth-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: incidents_incident_management_html_repo_host
+          ServiceInstanceName: incident-management-html5-app-host-service
+          ServiceKeyName: incident-management_html_repo_host-key
+          sap.cloud.service: incidents
+        - Authentication: OAuth2UserTokenExchange
+          Name: incidents_incident_management_auth
+          ServiceInstanceName: incident-management-auth
+          ServiceKeyName: incident-management-auth-key
+          sap.cloud.service: incidents
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: incident-management-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: incident-management-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: incident-management-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: incident-management-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: incident-management-destination-service
+    service-plan: lite
+- name: incident-management_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: incident-management-html5-app-host-service
+    service-plan: app-host
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npx cds build --production

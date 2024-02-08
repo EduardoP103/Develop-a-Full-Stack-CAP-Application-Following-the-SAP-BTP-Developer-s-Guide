@@ -93,6 +93,12 @@
           "pattern": "Incidents({key}):?query:",
           "name": "IncidentsObjectPage",
           "target": "IncidentsObjectPage"
+        },
+       
+        {
+          "pattern": "incidents-display",
+          "name": "IncidentsDisplay",
+          "target": "IncidentsDisplay"
         }
       ],
       "targets": {
@@ -139,6 +145,17 @@
                   }
                 }
               }
+            }
+          }
+        },
+      
+        "IncidentsDisplay": {
+          "type": "Component",
+          "id": "IncidentsDisplay",
+          "name": "your.target.component.name", 
+          "options": {
+            "settings": {
+             
             }
           }
         }
